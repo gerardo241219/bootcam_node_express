@@ -1,29 +1,51 @@
 import UserModel from "../models/UserModel.js";
 
 const createUser = (req, res) => {
-    res.send('Create User');
+    const { name, lastName, type } = req.body;
+
+    // Validar que los datos no esten vacios
+
+    if (name !== undefined && lastName !== undefined && type !== undefined) {
+        UserModel.createUser({ name, lastName, type }, (err, data) => {
+            if (err) {
+                return res.status(500).send({
+                    message: err.message || 'Error al crear el usuario'
+                })
+            } else {
+                return res.status(200).send({
+                    message: 'Usuario creado exitosamente',
+                    data
+                })
+            }
+        })
+    } else {
+        return res.status(400).send({
+            message: 'No se ha enviado la información completa'
+        })
+    }
 }
 
 const clientUsers = async (req, res) => {
-    console.log(req.body);
-    // POST
-    // GET
-    // const { typeUserGet } = req.query;
+    const { typeUserGet } = req.body;
 
-    // if(req.body !== undefined) {
-    //     const { typeUser } = req.body;
-    //     console.log(typeUser);
-    // } else {
-    //     res.send('Error');
-    // }
-
-    // UserModel.findClientUsers({ typeUser }, (err, data) => {
-    //     if (err) {
-    //         res.send('Error');
-    //     } else {
-    //         res.json(data);
-    //     }
-    // })
+    if (typeUserGet !== undefined) {
+        UserModel.findClientUsers({ typeUserGet }, (err, data) => {
+            if (err) {
+                return res.status(500).send({
+                    message: err.message || 'Error al consultar los usuarios'
+                })
+            } else {
+                return res.status(200).send({
+                    message: 'Consulta exitosa',
+                    data
+                })
+            }
+        })
+    } else {
+        return res.status(400).send({
+            message: 'No se ha enviado el tipo de usuario'
+        })
+    }
 }
 
 const updateUser = (req, res) => {

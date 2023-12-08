@@ -4,7 +4,7 @@ const UserModel = {};
 
 UserModel.findClientUsers = async (data, result) => {
     // Desestructuramos el objeto data
-    const { typeUser } = data;
+    const { typeUserGet } = data;
 
     // QUERY statement - (Select, Insert, Update, Delete)
     const query = `SELECT * FROM users WHERE type = ?`;
@@ -12,9 +12,27 @@ UserModel.findClientUsers = async (data, result) => {
     // ASIGNACION DE VALORES Y DEVOLUCION DE RESULTADOS (QUERY - DATA - CALLBACK)
     connection.query(
         query,
-        [typeUser],
+        [typeUserGet],
         (err, res) => {
-            if(err) {
+            if (err) {
+                result(err, null)
+            } else {
+                result(null, res)
+            }
+        }
+    )
+}
+
+UserModel.createUser = async (data, result) => {
+    const { name, lastName, type } = data;
+
+    const query = "INSERT INTO users (name, lastName, type) VALUES (?, ?, ?)";
+
+    connection.query(
+        query,
+        [name, lastName, type],
+        (err, res) => {
+            if (err) {
                 result(err, null)
             } else {
                 result(null, res)

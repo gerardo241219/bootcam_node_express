@@ -4,7 +4,7 @@ import { createUser, clientUsers, updateUser, deleteUser } from '../controllers/
 const router = express.Router();
 // const { createUser, readUser, updateUser, deleteUser } = UserController();
 
-router.get('/create', createUser);
+router.post('/create', createUser);
 router.get('/update', updateUser);
 router.post('/read', clientUsers);
 router.get('/delete', deleteUser);
